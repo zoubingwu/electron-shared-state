@@ -6,6 +6,8 @@ Sharing state between main and renderer process can be this easy.
 - 🎯 Write in typescript with full typing support!
 - ❤️ Elegant and easy to learn API!
 
+![](./showcase.gif)
+
 ## Install
 
 ```sh
