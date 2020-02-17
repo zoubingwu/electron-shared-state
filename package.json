@@ -27,10 +27,11 @@
     "typescript": "^3.7.5"
   },
   "peerDependencies": {
-    "electron": ">= 4"
+    "electron": "*"
   },
   "sideEffect": false,
   "devDependencies": {
+    "electron": "7.1.2",
     "husky": "^4.2.3",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1"
