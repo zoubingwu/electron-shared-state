@@ -6,6 +6,18 @@ Sharing state between main and renderer process can be this easy.
 - 🎯 Write with typescript with full typing support!
 - ❤️ Elegant and easy to learn API!
 
+## Install
+
+```sh
+npm install electron-shared-state
+```
+
+or
+
+```sh
+yarn add electron-shared-state
+```
+
 ## Usage
 
 ```ts
