@@ -1,10 +1,10 @@
-# electron-shared-state
+# electron-shared-state [![Actions Status](https://github.com/shadeofgod/electron-shared-state/workflows/test/badge.svg)](https://github.com/shadeofgod/electron-shared-state/actions) ![](https://img.shields.io/npm/l/electron-shared-state)
 
-🚀 easily sharing state between main and renderer process.
+Sharing state between main and renderer process can be this easy.
 
-- Simply mutate your state while keep them in sync with other process!
-- Full typescript support!
-- Super Easy API!
+- 🚀 Mutate your state while keep them in sync with other process!
+- 🎯 Write with typescript with full typing support!
+- ❤️ Elegant and easy to learn API!
 
 ## Usage
 
