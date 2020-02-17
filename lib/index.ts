@@ -25,7 +25,7 @@ export function createSharedStore<T>(state: T) {
   const isRenderer = process && process.type === 'renderer';
   const isMain = process && process.type === 'browser';
   const ipcModule = isMain ? ipcMain : ipcRenderer;
-  const INTERNAL_CHANNEL = '@@ELECTRON_SHARD_STORE_IPC_CHANNEL';
+  const INTERNAL_CHANNEL = '@@ELECTRON_SHARED_STORE_IPC_CHANNEL';
   let isUpdating = false;
 
   ipcModule.on(
