@@ -45,6 +45,8 @@ sharedStore.subscribe(state => {
 // both main and renderer will print the state after two seconds.
 ```
 
+check source code under [example directory](/example) for more info.
+
 ## API Reference
 
 ```ts
