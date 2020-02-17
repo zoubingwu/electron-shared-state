@@ -1,13 +1,13 @@
-import produce, { applyPatches, Patch } from "immer";
-import { BehaviorSubject, Subscription } from "rxjs";
+import produce, { applyPatches, Patch } from 'immer';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import {
   ipcMain,
   webContents,
   ipcRenderer,
   IpcRenderer,
   IpcMainInvokeEvent,
-  IpcRendererEvent
-} from "electron";
+  IpcRendererEvent,
+} from 'electron';
 
 export interface IChangePack {
   patches: Patch[];
@@ -19,13 +19,13 @@ export function createSharedStore<T>(state: T) {
   const innerState$ = new BehaviorSubject<T>(state);
   const change$ = new BehaviorSubject<IChangePack>({
     patches: [],
-    broadcast: false
+    broadcast: false,
   });
   const connected = new Set<number>(); // this is only for main process
-  const isRenderer = process && process.type === "renderer";
-  const isMain = process && process.type === "browser";
+  const isRenderer = process && process.type === 'renderer';
+  const isMain = process && process.type === 'browser';
   const ipcModule = isMain ? ipcMain : ipcRenderer;
-  const INTERNAL_CHANNEL = "@@ELECTRON_SHARD_STORE_IPC_CHANNEL";
+  const INTERNAL_CHANNEL = '@@ELECTRON_SHARD_STORE_IPC_CHANNEL';
   let isUpdating = false;
 
   ipcModule.on(
@@ -77,8 +77,8 @@ export function createSharedStore<T>(state: T) {
   function getState(): T {
     if (isUpdating) {
       throw new Error(
-        "You may not call store.getState() inside setState method. " +
-          "It has already received the state as an argument. "
+        'You may not call store.getState() inside setState method. ' +
+          'It has already received the state as an argument. '
       );
     }
 
@@ -93,7 +93,7 @@ export function createSharedStore<T>(state: T) {
     return function unsubscribe() {
       if (isUpdating) {
         throw new Error(
-          "You may not unsubscribe from a store listener while the state is updating. "
+          'You may not unsubscribe from a store listener while the state is updating. '
         );
       }
 
