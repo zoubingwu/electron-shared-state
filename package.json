@@ -1,0 +1,43 @@
+{
+  "name": "electron-shared-state",
+  "version": "0.1.0",
+  "description": "easily sharing state between main and renderer process.",
+  "main": "dist/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "electron",
+    "share",
+    "state",
+    "sync",
+    "process",
+    "store"
+  ],
+  "author": "zoubingwu",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^12",
+    "immer": "^5.3.6",
+    "rxjs": "^6.5.4",
+    "typescript": "^3.7.5"
+  },
+  "peerDependencies": {
+    "electron": ">= 4"
+  },
+  "sideEffect": false,
+  "devDependencies": {
+    "husky": "^4.2.3",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
+}
