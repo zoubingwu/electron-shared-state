@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "easily sharing state between main and renderer process.",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "directories": {
     "lib": "lib"
   },
@@ -40,5 +41,9 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
-  }
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.d.ts"
+  ]
 }
