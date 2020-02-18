@@ -2,10 +2,10 @@
 
 Sharing state between main and renderer process can be this easy.
 
-- 🚀 Mutate your state while keep them in sync with other process!
-- 🎯 Write in typescript with full typing support!
-- ❤️ Elegant and easy to learn API!
-- 👻 Immutability and structural sharing out of the box with built-in immer!
+- 🚀 Mutate your state while keep them in sync with other process
+- 🎯 Write in typescript with full typing support
+- ❤️ Elegant and easy to learn API
+- 👻 Immutability and structural sharing out of the box with built-in immer
 
 ![](./showcase.gif)
 
