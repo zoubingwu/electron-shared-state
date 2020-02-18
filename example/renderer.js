@@ -11,7 +11,7 @@ store.subscribe((state, changeDescription) => {
 document.querySelector('#inc').addEventListener('click', () => {
   store.setState(state => {
     state.count = state.count + 1;
-  }, '+1 by renderer');
+  }, `+1 by renderer from ${require('electron').remote.getCurrentWebContents().id}`);
 });
 document.querySelector('#dec').addEventListener('click', () => {
   ipcRenderer.send('decrement');
