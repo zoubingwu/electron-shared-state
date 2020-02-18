@@ -1,6 +1,6 @@
 {
   "name": "electron-shared-state",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "easily sharing state between main and renderer process.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
