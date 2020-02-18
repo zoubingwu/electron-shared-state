@@ -32,6 +32,11 @@ export function createSharedStore<T>(state: T) {
   ipcModule.on(
     INTERNAL_CHANNEL,
     (event: IpcMainInvokeEvent | IpcRendererEvent, change: IChangePack) => {
+      if (isMain) {
+        const id = (event as IpcMainInvokeEvent).sender.id; // webContent's id
+        connected.add(id);
+      }
+
       if (change.patches.length === 0) {
         return;
       }
@@ -45,11 +50,6 @@ export function createSharedStore<T>(state: T) {
       innerState$.next(nextState);
 
       isUpdating = false;
-
-      if (isMain) {
-        const id = (event as IpcMainInvokeEvent).sender.id; // webContent's id
-        connected.add(id);
-      }
     }
   );
 
