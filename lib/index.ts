@@ -43,14 +43,11 @@ export function createSharedStore<T>(state: T) {
       isUpdating = true;
 
       const nextState = applyPatches(innerState$.getValue(), change.patches);
-      if (isMain) {
-        change$.next({
-          ...change,
-          senderId: (event as IpcMainInvokeEvent).sender.id,
-        });
-      } else if (isRenderer) {
-        change$.next({ ...change, senderId: -1 }); // renderer always receives from main so id is -1
-      }
+      change$.next({
+        ...change,
+        senderId: isMain ? (event as IpcMainInvokeEvent).sender.id : -1, // renderer always receives from main so id is -1
+      });
+
       innerState$.next(nextState);
 
       isUpdating = false;
