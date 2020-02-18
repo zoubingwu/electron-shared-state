@@ -26,12 +26,18 @@ export function createSharedStore<T>(state: T) {
   const isMain = process && process.type === 'browser';
   const ipcModule = isMain ? ipcMain : ipcRenderer;
   const INTERNAL_CHANNEL = '@@ELECTRON_SHARED_STORE_IPC_CHANNEL';
+
   let isUpdating = false;
 
   ipcModule.on(
     INTERNAL_CHANNEL,
     (event: IpcMainInvokeEvent | IpcRendererEvent, change: IChangePack) => {
+      if (change.patches.length === 0) {
+        return;
+      }
+
       isUpdating = true;
+
       const nextState = applyPatches(innerState$.getValue(), change.patches);
 
       // do not broadcast to other process if it was from ipc message
@@ -48,7 +54,9 @@ export function createSharedStore<T>(state: T) {
   );
 
   change$.subscribe(change => {
-    if (change.patches.length === 0 || change.broadcast === false) return;
+    if (change.patches.length === 0 || change.broadcast === false) {
+      return;
+    }
 
     if (isRenderer) {
       (ipcModule as IpcRenderer).send(INTERNAL_CHANNEL, change);
@@ -66,7 +74,7 @@ export function createSharedStore<T>(state: T) {
     isUpdating = true;
     const baseState = innerState$.getValue();
     const nextState = produce(baseState, recipe, patches => {
-      change$.next({ patches, description, broadcast: true });
+      change$.next({ patches, description, broadcast: true }); // broadcast to other process if setState called
     });
 
     innerState$.next(nextState);
@@ -99,6 +107,14 @@ export function createSharedStore<T>(state: T) {
 
       unsub.unsubscribe();
     };
+  }
+
+  // send empty change to main, so main process can save the senderId
+  if (isRenderer) {
+    (ipcModule as IpcRenderer).send(INTERNAL_CHANNEL, {
+      patches: [],
+      broadcast: false,
+    });
   }
 
   return { setState, getState, subscribe };
