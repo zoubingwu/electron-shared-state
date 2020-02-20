@@ -1,13 +1,16 @@
 {
   "name": "electron-shared-state",
   "version": "0.3.0",
-  "description": "easily sharing state across electron main and renderer processes.",
+  "description": "❤️ easily sharing state across electron main and renderer processes.",
   "main": "dist/index.cjs.min.js",
   "module": "dist/index.esm.min.mjs",
   "types": "dist/index.d.ts",
   "directories": {
     "lib": "lib"
   },
+  "homepage": "https://github.com/shadeofgod/electron-shared-state#readme",
+  "repository": "github:shadeofgod/electron-shared-state",
+  "bugs": "https://github.com/shadeofgod/electron-shared-state/issues",
   "scripts": {
     "build": "rollup -c"
   },
