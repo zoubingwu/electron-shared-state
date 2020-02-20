@@ -1,14 +1,16 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const path = require('path');
 const { sharedState } = require('./shared');
-const { createSharedStore } = require('../dist/index');
+const { createSharedStore } = require('..');
 
 const store = createSharedStore(sharedState);
-
 store.subscribe((state, description) => {
-  console.log('sharedState in main changed to: ', state, description);
+  console.log(
+    'state in main changed to: ',
+    state,
+    'description: ',
+    description
+  );
 });
-
 ipcMain.on('decrement', () => {
   store.setState(state => {
     state.count = state.count - 1;
@@ -17,8 +19,8 @@ ipcMain.on('decrement', () => {
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 300,
+    height: 200,
     show: false,
     webPreferences: {
       nodeIntegration: true,
@@ -29,9 +31,10 @@ function createWindow() {
     mainWindow.show();
   });
   mainWindow.loadFile('index.html');
-  mainWindow.webContents.openDevTools({ mode: 'detach' });
 }
 app.on('ready', () => {
+  createWindow();
+  createWindow();
   createWindow();
   createWindow();
 });

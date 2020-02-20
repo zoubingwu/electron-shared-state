@@ -1,18 +1,21 @@
 const { ipcRenderer } = require('electron');
 const { sharedState } = require('./shared');
-const { createSharedStore } = require('../dist/index');
+const { createSharedStore } = require('..');
 
+const id = require('electron').remote.getCurrentWebContents().id;
 const store = createSharedStore(sharedState);
-const container = document.querySelector('#count');
 store.subscribe((state, changeDescription) => {
-  console.log('sharedState in renderer changed to: ', state, changeDescription);
-  container.innerHTML = state.count;
+  document.querySelector(
+    '#text'
+  ).innerHTML = `description: ${changeDescription}`;
+  document.querySelector('#count').innerHTML = state.count;
 });
 document.querySelector('#inc').addEventListener('click', () => {
   store.setState(state => {
     state.count = state.count + 1;
-  }, `+1 by renderer from ${require('electron').remote.getCurrentWebContents().id}`);
+  }, `+1 by window ${id}`);
 });
 document.querySelector('#dec').addEventListener('click', () => {
   ipcRenderer.send('decrement');
 });
+document.title = `window ${id}`;
