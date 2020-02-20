@@ -2,7 +2,7 @@ import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
 
 function config({ format, minify, input, ext = 'js' }) {
-  const dir = `dist/`;
+  const dir = `dist`;
   const minifierSuffix = minify ? '.min' : '';
   return {
     input: `./lib/${input}.ts`,
