@@ -1,18 +1,20 @@
 import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
+import resolve from '@rollup/plugin-node-resolve';
 
-function config({ format, minify, input, ext = 'js' }) {
+function config({ format, minify = true, input, ext = 'js' }) {
   const dir = `dist`;
-  const minifierSuffix = minify ? '.min' : '';
+
   return {
     input: `./lib/${input}.ts`,
     output: {
       name: 'index',
-      file: `${dir}/${input}.${format}${minifierSuffix}.${ext}`,
+      file: `${dir}/${input}.${format}.${ext}`,
       format,
       sourcemap: true,
     },
     plugins: [
+      resolve(),
       typescript({
         clean: true,
         typescript: require('typescript'),
@@ -22,6 +24,7 @@ function config({ format, minify, input, ext = 'js' }) {
           },
         },
       }),
+
       minify
         ? terser({
             sourcemap: true,
@@ -30,12 +33,13 @@ function config({ format, minify, input, ext = 'js' }) {
           })
         : undefined,
     ].filter(Boolean),
+    external: ['electron'],
   };
 }
 
 require('rimraf').sync('dist');
 
 export default [
-  { input: 'index', format: 'esm', minify: true, ext: 'mjs' },
-  { input: 'index', format: 'cjs', minify: true },
+  { input: 'index', format: 'esm' },
+  { input: 'index', format: 'cjs' },
 ].map(config);

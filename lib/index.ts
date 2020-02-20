@@ -1,5 +1,4 @@
 import produce, { applyPatches, Patch } from 'immer';
-import { BehaviorSubject, Subscription } from 'rxjs';
 import {
   ipcMain,
   webContents,
@@ -9,17 +8,17 @@ import {
   IpcRendererEvent,
 } from 'electron';
 
-export interface IChangePack {
+interface IChangePack {
   patches: Patch[];
   description?: string;
   senderId?: number;
 }
 
 export function createSharedStore<T>(state: T) {
-  const innerState$ = new BehaviorSubject<T>(state);
-  const change$ = new BehaviorSubject<IChangePack>({
-    patches: [],
-  });
+  let innerState = state;
+  let lastChange: IChangePack = { patches: [] };
+  let listeners: ((state: T, description?: string) => void)[] = [];
+
   const connected = new Set<number>(); // this is only for main process
   const isRenderer = process?.type === 'renderer';
   const isMain = process?.type === 'browser';
@@ -42,50 +41,66 @@ export function createSharedStore<T>(state: T) {
 
       isUpdating = true;
 
-      const nextState = applyPatches(innerState$.getValue(), change.patches);
-      change$.next({
+      const nextState = applyPatches(innerState, change.patches);
+      lastChange = {
         ...change,
-        senderId: isMain ? (event as IpcMainInvokeEvent).sender.id : -1, // renderer always receives from main so id is -1
-      });
+        senderId: isMain ? (event as IpcMainInvokeEvent).sender.id : -1, // renderer always receives from main so let's say id is -1
+      };
 
-      innerState$.next(nextState);
+      broadcastChange();
+
+      innerState = nextState;
 
       isUpdating = false;
+
+      for (let i = 0; i < listeners.length; i++) {
+        const listener = listeners[i];
+        listener(innerState, change.description);
+      }
     }
   );
 
-  change$.subscribe(change => {
-    if (change.patches.length === 0) {
+  function broadcastChange() {
+    if (lastChange.patches.length === 0) {
       return;
     }
 
     if (isRenderer) {
-      // if change was from main, we don't send it to main again
-      change.senderId !== -1 &&
-        (ipcModule as IpcRenderer).send(INTERNAL_CHANNEL, change);
+      // if lastChange was from main, we don't send it to main again
+      lastChange.senderId !== -1 &&
+        (ipcModule as IpcRenderer).send(INTERNAL_CHANNEL, lastChange);
     } else if (isMain) {
       connected.forEach(id => {
         // do not broadcast to sender process
-        if (id === change.senderId) {
+        if (id === lastChange.senderId) {
           return;
         }
 
         const wc = webContents.fromId(id);
         if (wc) {
-          wc.send(INTERNAL_CHANNEL, change);
+          wc.send(INTERNAL_CHANNEL, lastChange);
         }
       });
     }
-  });
+  }
 
   function setState(recipe: (draft: T) => void, description?: string) {
     isUpdating = true;
-    const nextState = produce(innerState$.getValue(), recipe, patches => {
-      change$.next({ patches, description });
+
+    const nextState = produce(innerState, recipe, patches => {
+      lastChange = { patches, description };
     });
 
-    innerState$.next(nextState);
+    broadcastChange();
+
+    innerState = nextState;
     isUpdating = false;
+
+    for (let i = 0; i < listeners.length; i++) {
+      const listener = listeners[i];
+      listener(innerState, lastChange.description);
+    }
+
     return nextState;
   }
 
@@ -97,13 +112,24 @@ export function createSharedStore<T>(state: T) {
       );
     }
 
-    return innerState$.getValue();
+    return innerState;
   }
 
   function subscribe(listener: (state: T, description?: string) => void) {
-    const unsub: Subscription = innerState$.subscribe(state =>
-      listener(state, change$.getValue().description)
-    );
+    if (typeof listener !== 'function') {
+      throw new Error('Expected the listener to be a function.');
+    }
+
+    if (isUpdating) {
+      throw new Error(
+        'You may not call store.subscribe() inside store.setState(). '
+      );
+    }
+
+    listeners.push(listener);
+
+    // run once for the first time for every one who just subscribed
+    listener(innerState, lastChange.description);
 
     return function unsubscribe() {
       if (isUpdating) {
@@ -112,7 +138,8 @@ export function createSharedStore<T>(state: T) {
         );
       }
 
-      unsub.unsubscribe();
+      const index = listeners.indexOf(listener);
+      listeners.splice(index, 1);
     };
   }
 
