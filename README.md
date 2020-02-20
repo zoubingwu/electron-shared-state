@@ -28,6 +28,7 @@ yarn add electron-shared-state
 export const initialState = 0;
 
 // renderer
+import { createSharedStore } from 'electron-shared-state';
 const sharedStore = createSharedStore(initialState);
 sharedStore.subscribe(state => {
   console.log(state);
@@ -40,6 +41,7 @@ setTimeout(() => {
 }, 2000);
 
 // main
+import { createSharedStore } from 'electron-shared-state';
 const sharedStore = createSharedStore(initialState);
 sharedStore.subscribe(state => {
   console.log(state);
@@ -52,6 +54,8 @@ check source code under [example directory](/example) for more info.
 
 ## API Reference
 
+electron-shared-state only provides one simple function: `createSharedStore`. The signature is like below:
+
 ```ts
 function createSharedStore<T>(
   state: T
@@ -63,3 +67,21 @@ function createSharedStore<T>(
   ) => () => void;
 };
 ```
+
+The input is the state your want to share across processes, generally it's an object.
+
+It returns a Store object with a few methods on it.
+
+**`setState(stateUpdater, description)`**
+
+Accepts a stateUpdater function and a description string for debug purpose. The stateUpdater is like the second argument of immer's produce, so it inherits [immer's pitfalls](https://immerjs.github.io/immer/docs/pitfalls).
+
+Returns the new state. It use immer underneath so the state remains immutable, to keep it in sync across processes, you should always use setState to update it.
+
+**`getState()`**
+
+Returns the current state.
+
+**`subscribe(listener)`**
+
+Adds a change listener. It will be called any time the state is changed, the listener receives the latest state and a description string as arguments.
