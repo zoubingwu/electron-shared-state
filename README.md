@@ -1,4 +1,4 @@
-# electron-shared-state ![](https://img.shields.io/npm/l/electron-shared-state)
+# electron-shared-state ![](https://img.shields.io/npm/l/electron-shared-state) ![](https://badgen.net/npm/v/electron-shared-state) ![](https://badgen.net/npm/types/electron-shared-state) ![](https://badgen.net/bundlephobia/minzip/electron-shared-state)
 
 Sharing state between main and renderer process can be this easy.
 
