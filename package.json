@@ -35,7 +35,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@types/node": "^12",
-    "electron": "7.1.2",
+    "electron": "9.1.0",
     "husky": "^4.2.3",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
