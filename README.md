@@ -1,4 +1,6 @@
-# electron-shared-state ![](https://img.shields.io/npm/l/electron-shared-state) ![](https://badgen.net/npm/v/electron-shared-state) ![](https://badgen.net/npm/types/electron-shared-state) ![](https://badgen.net/bundlephobia/minzip/electron-shared-state)
+# electron-shared-state
+
+![](https://img.shields.io/npm/l/electron-shared-state) ![](https://badgen.net/npm/v/electron-shared-state) ![](https://badgen.net/npm/types/electron-shared-state) ![](https://badgen.net/bundlephobia/minzip/electron-shared-state) [![publish](https://github.com/zoubingwu/electron-shared-state/actions/workflows/publish.yaml/badge.svg)](https://github.com/zoubingwu/electron-shared-state/actions/workflows/publish.yaml) ![](https://ci.appveyor.com/api/projects/status/qa0gjesulanclwvg?svg=true)
 
 Sharing state between main and renderer process can be this easy.
 
@@ -30,12 +32,12 @@ export const initialState = 0;
 // renderer
 import { createSharedStore } from 'electron-shared-state';
 const sharedStore = createSharedStore(initialState);
-sharedStore.subscribe(state => {
+sharedStore.subscribe((state) => {
   console.log(state);
 });
 
 setTimeout(() => {
-  sharedStore.setState(state => {
+  sharedStore.setState((state) => {
     state = state + 1;
   });
 }, 2000);
@@ -43,7 +45,7 @@ setTimeout(() => {
 // main
 import { createSharedStore } from 'electron-shared-state';
 const sharedStore = createSharedStore(initialState);
-sharedStore.subscribe(state => {
+sharedStore.subscribe((state) => {
   console.log(state);
 });
 
@@ -57,9 +59,7 @@ check source code under [example directory](/example) for more info.
 electron-shared-state only provides one simple function: `createSharedStore`. The signature is like below:
 
 ```ts
-function createSharedStore<T>(
-  state: T
-): {
+function createSharedStore<T>(state: T): {
   setState: (recipe: (draft: T) => void, description?: string | undefined) => T;
   getState: () => T;
   subscribe: (
