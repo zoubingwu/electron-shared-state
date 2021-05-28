@@ -1,4 +1,4 @@
-import produce, { applyPatches, Patch } from 'immer';
+import produce, { applyPatches, Patch, enablePatches } from 'immer';
 import {
   ipcMain,
   webContents,
@@ -7,6 +7,8 @@ import {
   IpcMainInvokeEvent,
   IpcRendererEvent,
 } from 'electron';
+
+enablePatches();
 
 interface IChangePack {
   patches: Patch[];
@@ -70,7 +72,7 @@ export function createSharedStore<T>(state: T) {
       lastChange.senderId !== -1 &&
         (ipcModule as IpcRenderer).send(INTERNAL_CHANNEL, lastChange);
     } else if (isMain) {
-      connected.forEach(id => {
+      connected.forEach((id) => {
         // do not broadcast to sender process
         if (id === lastChange.senderId) {
           return;
@@ -87,7 +89,7 @@ export function createSharedStore<T>(state: T) {
   function setState(recipe: (draft: T) => void, description?: string) {
     isUpdating = true;
 
-    const nextState = produce(innerState, recipe, patches => {
+    const nextState = produce(innerState, recipe, (patches) => {
       lastChange = { patches, description };
     });
 

@@ -3,6 +3,7 @@ const { sharedState } = require('./shared');
 const { createSharedStore } = require('..');
 
 const store = createSharedStore(sharedState);
+
 store.subscribe((state, description) => {
   console.log(
     'state in main changed to: ',
@@ -11,8 +12,9 @@ store.subscribe((state, description) => {
     description
   );
 });
+
 ipcMain.on('decrement', () => {
-  store.setState(state => {
+  store.setState((state) => {
     state.count = state.count - 1;
   }, '-1 from main');
 });
@@ -24,23 +26,26 @@ function createWindow() {
     show: false,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
+      contextIsolation: false,
     },
   });
 
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
-  });
   mainWindow.loadFile('index.html');
+  mainWindow.show();
 }
+
 app.on('ready', () => {
   createWindow();
   createWindow();
   createWindow();
   createWindow();
 });
-app.on('window-all-closed', function() {
+
+app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit();
 });
-app.on('activate', function() {
+
+app.on('activate', function () {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
