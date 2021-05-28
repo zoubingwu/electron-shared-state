@@ -48,11 +48,11 @@ describe('electron-shared-state', function () {
   let app = null;
 
   beforeEach(function () {
-    return (app = startApplication({
+    return startApplication({
       args: [path.join(__dirname, '../example')],
     }).then((startedApp) => {
       app = startedApp;
-    }));
+    });
   });
 
   afterEach(function () {
@@ -60,15 +60,12 @@ describe('electron-shared-state', function () {
   });
 
   it('should open multiple windows', async function () {
-    await app.client.waitUntilWindowLoaded(10000);
     app.browserWindow.focus();
     const windowCount = await app.client.getWindowCount();
     assert.strictEqual(windowCount, 4);
   });
 
   it('should have right title for each windows', async function () {
-    await app.client.waitUntilWindowLoaded(10000);
-
     const titles = [];
 
     await app.client.windowByIndex(0);
@@ -90,7 +87,6 @@ describe('electron-shared-state', function () {
   });
 
   it('should render content correctly', async function () {
-    await app.client.waitUntilWindowLoaded(10000);
     await app.client.windowByIndex(0);
     const count = await app.webContents.executeJavaScript(
       'document.querySelector("#count").innerHTML'
@@ -114,8 +110,6 @@ describe('electron-shared-state', function () {
   });
 
   it('should increment count for every window', async function () {
-    await app.client.waitUntilWindowLoaded(10000);
-
     await app.client.windowByIndex(0);
     await app.webContents.executeJavaScript(
       'document.querySelector("#inc").click()'
