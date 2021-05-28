@@ -25,13 +25,17 @@ yarn add electron-shared-state
 
 ## Usage
 
+You can check source code under [example directory](/example).
+
 ```ts
 // shared
 export const initialState = 0;
 
 // renderer
 import { createSharedStore } from 'electron-shared-state';
+
 const sharedStore = createSharedStore(initialState);
+
 sharedStore.subscribe((state) => {
   console.log(state);
 });
@@ -44,7 +48,9 @@ setTimeout(() => {
 
 // main
 import { createSharedStore } from 'electron-shared-state';
+
 const sharedStore = createSharedStore(initialState);
+
 sharedStore.subscribe((state) => {
   console.log(state);
 });
@@ -52,7 +58,36 @@ sharedStore.subscribe((state) => {
 // both main and renderer will print the state after two seconds.
 ```
 
-check source code under [example directory](/example) for more info.
+If your project already using state management tools like redux, you can easily replace a slice of your state with electron-shared-state, so you can just share part of the state you want to share without create a whole state tree in both processes.
+
+```ts
+// renderer
+
+const sharedStore = createSharedStore(initialState);
+
+// split state into a reducer
+function sharedReducer(state, action) {
+  switch (action.type) {
+    case 'some action type':
+      const nextState = sharedStore.setState(...);
+      return nextState;
+  }
+}
+
+// combine with other reducer
+const rootReducer = combindReducers({
+  other: ...,
+  shared: sharedReducer,
+  ...
+});
+
+// create redux store
+const store = createStore(rootReducer)
+
+// in main process
+// only this part of state will be shared across main and renderer
+export const store = createSharedStore(initialState);
+```
 
 ## API Reference
 
