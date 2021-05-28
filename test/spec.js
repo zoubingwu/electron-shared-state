@@ -65,7 +65,7 @@ describe('electron-shared-state', function () {
     assert.strictEqual(windowCount, 4);
   });
 
-  it('should have right title for each windows', async function () {
+  it('should have right title for each window', async function () {
     const titles = [];
 
     await app.client.windowByIndex(0);
@@ -156,5 +156,52 @@ describe('electron-shared-state', function () {
       'document.querySelector("#text").innerHTML'
     );
     assert.strictEqual(desc4, `description: +1 by ${id}`);
+  });
+
+  it('should decrement for every window', async function () {
+    await app.client.windowByIndex(0);
+    await app.webContents.executeJavaScript(
+      'document.querySelector("#dec").click()'
+    );
+    await sleep(50);
+
+    const count1 = await app.webContents.executeJavaScript(
+      'document.querySelector("#count").innerHTML'
+    );
+    assert.strictEqual(count1, '-1');
+    const desc1 = await app.webContents.executeJavaScript(
+      'document.querySelector("#text").innerHTML'
+    );
+    assert.strictEqual(desc1, `description: -1 from main`);
+
+    await app.client.windowByIndex(0);
+    const count2 = await app.webContents.executeJavaScript(
+      'document.querySelector("#count").innerHTML'
+    );
+    assert.strictEqual(count2, '-1');
+    const desc2 = await app.webContents.executeJavaScript(
+      'document.querySelector("#text").innerHTML'
+    );
+    assert.strictEqual(desc2, `description: -1 from main`);
+
+    await app.client.windowByIndex(0);
+    const count3 = await app.webContents.executeJavaScript(
+      'document.querySelector("#count").innerHTML'
+    );
+    assert.strictEqual(count3, '-1');
+    const desc3 = await app.webContents.executeJavaScript(
+      'document.querySelector("#text").innerHTML'
+    );
+    assert.strictEqual(desc3, `description: -1 from main`);
+
+    await app.client.windowByIndex(0);
+    const count4 = await app.webContents.executeJavaScript(
+      'document.querySelector("#count").innerHTML'
+    );
+    assert.strictEqual(count4, '-1');
+    const desc4 = await app.webContents.executeJavaScript(
+      'document.querySelector("#text").innerHTML'
+    );
+    assert.strictEqual(desc4, `description: -1 from main`);
   });
 });
