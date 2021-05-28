@@ -120,7 +120,7 @@ describe('electron-shared-state', function () {
     await app.webContents.executeJavaScript(
       'document.querySelector("#inc").click()'
     );
-    await sleep(200);
+    await sleep(50);
 
     const id = await app.webContents.getTitle();
 
