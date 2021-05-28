@@ -1,6 +1,6 @@
 {
   "name": "electron-shared-state",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "description": "❤️ easily sharing state across electron main and renderer processes.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -29,9 +29,6 @@
   ],
   "author": "zoubingwu",
   "license": "MIT",
-  "dependencies": {
-    "immer": "^9.0.2"
-  },
   "peerDependencies": {
     "electron": "*"
   },
@@ -40,6 +37,7 @@
     "@types/node": "^15.6.1",
     "electron": "13.0.1",
     "husky": "^6.0.0",
+    "immer": "^9.0.2",
     "mocha": "^8.4.0",
     "prettier": "^2.3.0",
     "pretty-quick": "^3.1.0",
