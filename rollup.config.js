@@ -18,16 +18,10 @@ function config({ format, minify = true, input, ext = 'js' }) {
       typescript({
         clean: true,
         typescript: require('typescript'),
-        tsconfigOverride: {
-          compilerOptions: {
-            sourceMap: true,
-          },
-        },
       }),
 
       minify
         ? terser({
-            sourcemap: true,
             compress: true,
             mangle: true,
           })
