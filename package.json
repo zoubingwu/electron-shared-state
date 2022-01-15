@@ -2,9 +2,12 @@
   "name": "electron-shared-state",
   "version": "1.0.0",
   "description": "❤️ easily sharing state across electron main and renderer processes.",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "jsnext:main": "dist/index.esm.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "exports": {
+    "require": "./dist/index.js",
+    "import": "./dist/index.mjs"
+  },
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "directories": {
@@ -14,7 +17,7 @@
   "repository": "github:shadeofgod/electron-shared-state",
   "bugs": "https://github.com/shadeofgod/electron-shared-state/issues",
   "scripts": {
-    "build": "rollup -c",
+    "build": "tsup lib/index.ts --minify --dts --format esm,cjs",
     "example": "electron example/main.js",
     "prepare": "is-ci || husky install",
     "test": "mocha"
@@ -33,20 +36,16 @@
     "electron": "*"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^13.0.0",
     "@types/node": "^15.6.1",
-    "electron": "13.0.1",
+    "electron": "13.6.6",
     "husky": "^6.0.0",
     "immer": "^9.0.2",
     "is-ci": "^3.0.0",
     "mocha": "^8.4.0",
     "prettier": "^2.3.0",
     "pretty-quick": "^3.1.0",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.50.2",
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-typescript2": "^0.30.0",
     "spectron": "^15.0.0",
+    "tsup": "^5.11.11",
     "typescript": "^4.3.2"
   },
   "files": [
