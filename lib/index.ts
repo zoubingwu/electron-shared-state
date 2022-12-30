@@ -17,7 +17,10 @@ interface IChangePack {
   senderId?: number;
 }
 
-export function createSharedStore<T extends Objectish>(state: T) {
+export function createSharedStore<T extends Objectish>(
+  state: T,
+  storeName?: string
+) {
   let innerState = state;
   let lastChange: IChangePack = { patches: [] };
   let listeners: ((state: T, description?: string) => void)[] = [];
@@ -26,7 +29,9 @@ export function createSharedStore<T extends Objectish>(state: T) {
   const isRenderer = process?.type === 'renderer';
   const isMain = process?.type === 'browser';
   const ipcModule = isMain ? ipcMain : ipcRenderer;
-  const INTERNAL_CHANNEL = '@@ELECTRON_SHARED_STORE_IPC_CHANNEL';
+  const INTERNAL_CHANNEL = `@@ELECTRON_SHARED_STORE_IPC_CHANNEL${
+    storeName ? '::' + storeName : ''
+  }`;
 
   let isUpdating = false;
 
