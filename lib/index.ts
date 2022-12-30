@@ -7,6 +7,7 @@ import {
   IpcMainInvokeEvent,
   IpcRendererEvent,
 } from 'electron';
+import type { Objectish } from 'immer/dist/internal';
 
 enablePatches();
 
@@ -16,7 +17,7 @@ interface IChangePack {
   senderId?: number;
 }
 
-export function createSharedStore<T>(state: T) {
+export function createSharedStore<T extends Objectish>(state: T) {
   let innerState = state;
   let lastChange: IChangePack = { patches: [] };
   let listeners: ((state: T, description?: string) => void)[] = [];
