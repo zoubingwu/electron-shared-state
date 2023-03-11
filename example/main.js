@@ -38,7 +38,7 @@ function createWindow(title) {
   mainWindow.setTitle(title);
   mainWindow.loadFile('index.html');
   mainWindow.show();
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 }
 
 app.on('ready', () => {
