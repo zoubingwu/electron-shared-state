@@ -5,3 +5,4 @@ node_modules/
 yarn.lock
 *.log
 package-lock.json
+.DS_Store
