@@ -19,10 +19,14 @@ ipcMain.on('decrement', () => {
   }, '-1 from main');
 });
 
-function createWindow() {
+ipcMain.handle('getTitle', (e) => {
+  return BrowserWindow.fromWebContents(e.sender).getTitle();
+});
+
+function createWindow(title) {
   const mainWindow = new BrowserWindow({
-    width: 300,
-    height: 200,
+    width: 600,
+    height: 400,
     show: false,
     webPreferences: {
       nodeIntegration: true,
@@ -31,15 +35,17 @@ function createWindow() {
     },
   });
 
+  mainWindow.setTitle(title);
   mainWindow.loadFile('index.html');
   mainWindow.show();
+  mainWindow.webContents.openDevTools();
 }
 
 app.on('ready', () => {
-  createWindow();
-  createWindow();
-  createWindow();
-  createWindow();
+  createWindow('window 1');
+  createWindow('window 2');
+  createWindow('window 3');
+  createWindow('window 4');
 });
 
 app.on('window-all-closed', function () {
