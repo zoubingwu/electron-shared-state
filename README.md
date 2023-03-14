@@ -4,8 +4,8 @@
 ![](https://badgen.net/npm/v/electron-shared-state)
 ![](https://badgen.net/npm/types/electron-shared-state)
 ![](https://badgen.net/bundlephobia/minzip/electron-shared-state)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zoubingwu/electron-shared-state/publish?label=publish)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zoubingwu/electron-shared-state/test?label=test)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zoubingwu/electron-shared-state/publish.yaml?label=publish)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/zoubingwu/electron-shared-state/test.yaml?label=test)
 
 Sharing state between main and renderer process can be this easy.
 
