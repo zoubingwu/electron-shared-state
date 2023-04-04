@@ -99,7 +99,14 @@ export const store = createSharedStore(initialState);
 electron-shared-state only provides one simple function: `createSharedStore`. The signature is like below:
 
 ```ts
-function createSharedStore<T>(state: T): {
+interface Options {
+  name?: string;
+}
+
+function createSharedStore<T>(
+  state: T,
+  options?: Options
+): {
   setState: (recipe: (draft: T) => void, description?: string | undefined) => T;
   getState: () => T;
   subscribe: (
@@ -109,6 +116,13 @@ function createSharedStore<T>(state: T): {
 ```
 
 The input is the state your want to share across processes, generally it's an object.
+
+It also accepts an optional `Option` object, you can pass a store name if you want to have multiple stores.
+
+```ts
+const s1 = createSharedStore(..., { name: 's1' })
+const s2 = createSharedStore(..., { name: 's2' })
+```
 
 It returns a Store object with a few methods on it.
 
