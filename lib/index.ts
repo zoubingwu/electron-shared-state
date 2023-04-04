@@ -17,20 +17,25 @@ interface IChangePack {
   senderId?: number;
 }
 
+interface Options {
+  name?: string;
+}
+
 export function createSharedStore<T extends Objectish>(
   state: T,
-  storeName?: string
+  options: Options = {}
 ) {
   let innerState = state;
   let lastChange: IChangePack = { patches: [] };
   let listeners: ((state: T, description?: string) => void)[] = [];
 
+  const { name } = options;
   const connected = new Set<number>(); // this is only for main process
   const isRenderer = process?.type === 'renderer';
   const isMain = process?.type === 'browser';
   const ipcModule = isMain ? ipcMain : ipcRenderer;
   const INTERNAL_CHANNEL = `@@ELECTRON_SHARED_STORE_IPC_CHANNEL${
-    storeName ? '::' + storeName : ''
+    name ? '::' + name : ''
   }`;
 
   let isUpdating = false;
