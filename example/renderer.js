@@ -2,7 +2,6 @@ const { ipcRenderer } = require('electron');
 const { sharedState } = require('./shared');
 const { createSharedStore } = require('..');
 
-const id = require('electron').remote.getCurrentWebContents().id;
 const store = createSharedStore(sharedState);
 
 store.subscribe((state, changeDescription) => {
@@ -12,14 +11,15 @@ store.subscribe((state, changeDescription) => {
   }`;
 });
 
-document.querySelector('#inc').addEventListener('click', () => {
+document.querySelector('#inc').addEventListener('click', async () => {
+  console.log('increment');
+  const title = await ipcRenderer.invoke('getTitle');
   store.setState((state) => {
     state.count = state.count + 1;
-  }, `+1 by window ${id}`);
+  }, `+1 by ${title}`);
 });
 
 document.querySelector('#dec').addEventListener('click', () => {
+  console.log('decrement');
   ipcRenderer.send('decrement');
 });
-
-document.title = `window ${id}`;

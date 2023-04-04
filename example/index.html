@@ -10,13 +10,12 @@
       http-equiv="X-Content-Security-Policy"
       content="default-src 'self'; script-src 'self'"
     />
-    <title>Hello World!</title>
   </head>
   <body>
-    <h2 id="count"></h2>
-    <button id="inc">this increment in renderer</button>
-    <button id="dec">this decrement in main</button>
-    <p id="text"></p>
+    <h2 id="count" data-testid="count"></h2>
+    <button id="inc" data-testid="inc">this increment in renderer</button>
+    <button id="dec" data-testid="dec">this decrement in main</button>
+    <p id="text" data-testid="text"></p>
     <script src="./renderer.js"></script>
   </body>
 </html>
